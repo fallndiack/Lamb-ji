@@ -11,7 +11,8 @@ namespace Lamb_Ji_DAL
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.Web;
+
     public partial class Lutteur
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -19,11 +20,11 @@ namespace Lamb_Ji_DAL
         {
             this.Affiches = new HashSet<Affiche>();
             this.Affiches1 = new HashSet<Affiche>();
-            this.Club_Lutteur = new HashSet<Club_Lutteur>();
             this.Licences = new HashSet<Licence>();
         }
     
         public int LutteurID { get; set; }
+        public Nullable<int> LutteurClubID { get; set; }
         public string LutteurName { get; set; }
         public string LutteurEmail { get; set; }
         public int LutteurPoids { get; set; }
@@ -32,13 +33,15 @@ namespace Lamb_Ji_DAL
         public string LutteurDescription { get; set; }
         public string LutteurTelephone { get; set; }
         public string imageUrl { get; set; }
-    
+
+        public HttpPostedFileBase ImageUpload { get; set; }
+
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Affiche> Affiches { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Affiche> Affiches1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Club_Lutteur> Club_Lutteur { get; set; }
+        public virtual Club Club { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Licence> Licences { get; set; }
     }

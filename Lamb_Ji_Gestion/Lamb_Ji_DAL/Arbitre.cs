@@ -11,7 +11,8 @@ namespace Lamb_Ji_DAL
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.Web;
+
     public partial class Arbitre
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -25,7 +26,10 @@ namespace Lamb_Ji_DAL
         public string ArbitreEmail { get; set; }
         public Nullable<System.DateTime> ArbitreDateNaissance { get; set; }
         public string imageUrl { get; set; }
-    
+
+        public HttpPostedFileBase ImageUpload { get; set; }
+
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Combat> Combats { get; set; }
     }

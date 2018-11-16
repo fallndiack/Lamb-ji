@@ -23,7 +23,7 @@ namespace Lamb_Ji_UI.Controllers
             list.Add(new MenuDynamique { Lien = "#", NomLien = "ACCUEIL" });
             list.Add(new MenuDynamique { Lien = "#", NomLien = "LUTTEURS" });
             list.Add(new MenuDynamique { Lien = "#", NomLien = "COMBATS A VENIR" });
-            list.Add(new MenuDynamique { Lien = "#", NomLien = "ARBITRE" });
+            list.Add(new MenuDynamique { Lien = "#", NomLien = "ACTUALITES" });
             list.Add(new MenuDynamique { Lien = "#",/*/Club/AddNewClub*/ NomLien = "STADES" });
 
 

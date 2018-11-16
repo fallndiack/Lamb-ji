@@ -192,6 +192,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ClubController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LutteurController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MenuAccueilController.cs" />
     <Compile Include="Controllers\SliderController.cs" />
@@ -273,10 +274,14 @@
     <Content Include="Views\Slider\AddImage.cshtml" />
     <Content Include="Views\Slider\SliderAccueil.cshtml" />
     <Content Include="Views\Club\AddNewClub.cshtml" />
+    <Content Include="Views\Club\Index.cshtml" />
+    <Content Include="Views\Lutteur\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Images\Image-Arbitre\" />
     <Folder Include="Images\Image-Club\" />
+    <Folder Include="Images\Image-Lutteur\" />
     <Folder Include="Views\MenuAccueil\" />
   </ItemGroup>
   <ItemGroup>

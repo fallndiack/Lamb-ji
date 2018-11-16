@@ -41,9 +41,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArbitreViewModel.cs" />
     <Compile Include="ClubViewModel.cs" />
+    <Compile Include="CombatViewModel.cs" />
     <Compile Include="ImageDto.cs" />
+    <Compile Include="LutteurViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Lamb_Ji_DAL\Lamb_Ji_DAL.csproj">
+      <Project>{874371dc-ec30-4da0-acd8-62a6303b61a9}</Project>
+      <Name>Lamb_Ji_DAL</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

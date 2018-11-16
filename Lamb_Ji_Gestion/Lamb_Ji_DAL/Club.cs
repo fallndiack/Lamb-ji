@@ -18,7 +18,7 @@ namespace Lamb_Ji_DAL
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Club()
         {
-            this.Club_Lutteur = new HashSet<Club_Lutteur>();
+            this.Lutteurs = new HashSet<Lutteur>();
         }
     
         public int ClubID { get; set; }
@@ -27,10 +27,11 @@ namespace Lamb_Ji_DAL
         public string ClubAdresse { get; set; }
         public string ClubEmail { get; set; }
         public string imageUrl { get; set; }
+
         public HttpPostedFileBase ImageUpload { get; set; }
 
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Club_Lutteur> Club_Lutteur { get; set; }
+        public virtual ICollection<Lutteur> Lutteurs { get; set; }
     }
 }

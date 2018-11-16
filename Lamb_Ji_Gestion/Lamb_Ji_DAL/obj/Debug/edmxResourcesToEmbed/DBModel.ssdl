@@ -61,16 +61,6 @@
     <Property Name="ClubEmail" Type="nvarchar(max)" />
     <Property Name="imageUrl" Type="nvarchar(max)" />
   </EntityType>
-  <EntityType Name="Club_Lutteur">
-    <Key>
-      <PropertyRef Name="Club_LutteurID" />
-    </Key>
-    <Property Name="Club_LutteurID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="LutteurID" Type="int" Nullable="false" />
-    <Property Name="ClubID" Type="int" Nullable="false" />
-    <Property Name="Date_Entree" Type="date" Nullable="false" />
-    <Property Name="Date_Sortie" Type="date" />
-  </EntityType>
   <EntityType Name="Combat">
     <Key>
       <PropertyRef Name="CombatID" />
@@ -104,6 +94,7 @@
       <PropertyRef Name="LutteurID" />
     </Key>
     <Property Name="LutteurID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="LutteurClubID" Type="int" />
     <Property Name="LutteurName" Type="nvarchar(max)" Nullable="false" />
     <Property Name="LutteurEmail" Type="nvarchar(max)" />
     <Property Name="LutteurPoids" Type="int" Nullable="false" />
@@ -212,30 +203,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_Club_Lutteur_Club">
-    <End Role="Club" Type="Self.Club" Multiplicity="1" />
-    <End Role="Club_Lutteur" Type="Self.Club_Lutteur" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Club">
-        <PropertyRef Name="ClubID" />
-      </Principal>
-      <Dependent Role="Club_Lutteur">
-        <PropertyRef Name="ClubID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Club_Lutteur_Lutteur">
-    <End Role="Lutteur" Type="Self.Lutteur" Multiplicity="1" />
-    <End Role="Club_Lutteur" Type="Self.Club_Lutteur" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Lutteur">
-        <PropertyRef Name="LutteurID" />
-      </Principal>
-      <Dependent Role="Club_Lutteur">
-        <PropertyRef Name="LutteurID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_Combat_Categorie">
     <End Role="Categorie" Type="Self.Categorie" Multiplicity="1" />
     <End Role="Combat" Type="Self.Combat" Multiplicity="*" />
@@ -296,7 +263,50 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_Lutteur_Club">
+    <End Role="Club" Type="Self.Club" Multiplicity="0..1" />
+    <End Role="Lutteur" Type="Self.Lutteur" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Club">
+        <PropertyRef Name="ClubID" />
+      </Principal>
+      <Dependent Role="Lutteur">
+        <PropertyRef Name="LutteurClubID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Function Name="Affichage_Complet_Lutteur" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
+  <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+    <Parameter Name="version" Type="int" Mode="In" />
+    <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+  </Function>
+  <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+    <Parameter Name="version" Type="int" Mode="In" />
+    <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+  </Function>
+  <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+    <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <EntityContainer Name="CNGLUTTEDBModelStoreContainer">
     <EntitySet Name="Affiche" EntityType="Self.Affiche" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Arbitre" EntityType="Self.Arbitre" Schema="dbo" store:Type="Tables" />
@@ -304,7 +314,6 @@
     <EntitySet Name="AvisAffiche" EntityType="Self.AvisAffiche" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Categorie" EntityType="Self.Categorie" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Club" EntityType="Self.Club" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="Club_Lutteur" EntityType="Self.Club_Lutteur" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Combat" EntityType="Self.Combat" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Image" EntityType="Self.Image" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Licence" EntityType="Self.Licence" Schema="dbo" store:Type="Tables" />
@@ -336,14 +345,6 @@
       <End Role="Affiche" EntitySet="Affiche" />
       <End Role="AvisAffiche" EntitySet="AvisAffiche" />
     </AssociationSet>
-    <AssociationSet Name="FK_Club_Lutteur_Club" Association="Self.FK_Club_Lutteur_Club">
-      <End Role="Club" EntitySet="Club" />
-      <End Role="Club_Lutteur" EntitySet="Club_Lutteur" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Club_Lutteur_Lutteur" Association="Self.FK_Club_Lutteur_Lutteur">
-      <End Role="Lutteur" EntitySet="Lutteur" />
-      <End Role="Club_Lutteur" EntitySet="Club_Lutteur" />
-    </AssociationSet>
     <AssociationSet Name="FK_Combat_Categorie" Association="Self.FK_Combat_Categorie">
       <End Role="Categorie" EntitySet="Categorie" />
       <End Role="Combat" EntitySet="Combat" />
@@ -363,6 +364,10 @@
     <AssociationSet Name="FK_Licence_TypeLutteur" Association="Self.FK_Licence_TypeLutteur">
       <End Role="TypeLutte" EntitySet="TypeLutte" />
       <End Role="Licence" EntitySet="Licence" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Lutteur_Club" Association="Self.FK_Lutteur_Club">
+      <End Role="Club" EntitySet="Club" />
+      <End Role="Lutteur" EntitySet="Lutteur" />
     </AssociationSet>
   </EntityContainer>
 </Schema>

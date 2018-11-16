@@ -11,7 +11,8 @@ namespace Lamb_Ji_DAL
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.Web;
+
     public partial class Licence
     {
         public int LicenceID { get; set; }
@@ -19,7 +20,10 @@ namespace Lamb_Ji_DAL
         public int TypeLutteID { get; set; }
         public System.DateTime LicenceDate_Debut { get; set; }
         public System.DateTime LicenceDate_Fin { get; set; }
-    
+
+        public HttpPostedFileBase ImageUpload { get; set; }
+
+
         public virtual Lutteur Lutteur { get; set; }
         public virtual TypeLutte TypeLutte { get; set; }
     }

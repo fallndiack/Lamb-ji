@@ -11,6 +11,11 @@ namespace Lamb_Ji_UI.Controllers
     public class ClubController : Controller
     {
         CNGLUTTEDBEntities db = new CNGLUTTEDBEntities();
+
+        public ActionResult Index()
+        {
+            return View();
+        }
         public ActionResult AddNewClub()
         {
             return View();

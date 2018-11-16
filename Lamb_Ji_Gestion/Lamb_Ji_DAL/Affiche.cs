@@ -11,7 +11,8 @@ namespace Lamb_Ji_DAL
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.Web;
+
     public partial class Affiche
     {
         public int AfficheID { get; set; }
@@ -22,7 +23,11 @@ namespace Lamb_Ji_DAL
         public int AfficheDate { get; set; }
         public string Vaincqueur { get; set; }
         public string imageUrl { get; set; }
-    
+
+        public HttpPostedFileBase ImageUpload { get; set; }
+
+
+
         public virtual Combat Combat { get; set; }
         public virtual Lutteur Lutteur { get; set; }
         public virtual Lutteur Lutteur1 { get; set; }

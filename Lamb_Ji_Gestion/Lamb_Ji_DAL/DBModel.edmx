@@ -66,16 +66,6 @@
           <Property Name="ClubEmail" Type="nvarchar(max)" />
           <Property Name="imageUrl" Type="nvarchar(max)" />
         </EntityType>
-        <EntityType Name="Club_Lutteur">
-          <Key>
-            <PropertyRef Name="Club_LutteurID" />
-          </Key>
-          <Property Name="Club_LutteurID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="LutteurID" Type="int" Nullable="false" />
-          <Property Name="ClubID" Type="int" Nullable="false" />
-          <Property Name="Date_Entree" Type="date" Nullable="false" />
-          <Property Name="Date_Sortie" Type="date" />
-        </EntityType>
         <EntityType Name="Combat">
           <Key>
             <PropertyRef Name="CombatID" />
@@ -109,6 +99,7 @@
             <PropertyRef Name="LutteurID" />
           </Key>
           <Property Name="LutteurID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LutteurClubID" Type="int" />
           <Property Name="LutteurName" Type="nvarchar(max)" Nullable="false" />
           <Property Name="LutteurEmail" Type="nvarchar(max)" />
           <Property Name="LutteurPoids" Type="int" Nullable="false" />
@@ -217,30 +208,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Club_Lutteur_Club">
-          <End Role="Club" Type="Self.Club" Multiplicity="1" />
-          <End Role="Club_Lutteur" Type="Self.Club_Lutteur" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Club">
-              <PropertyRef Name="ClubID" />
-            </Principal>
-            <Dependent Role="Club_Lutteur">
-              <PropertyRef Name="ClubID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Club_Lutteur_Lutteur">
-          <End Role="Lutteur" Type="Self.Lutteur" Multiplicity="1" />
-          <End Role="Club_Lutteur" Type="Self.Club_Lutteur" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Lutteur">
-              <PropertyRef Name="LutteurID" />
-            </Principal>
-            <Dependent Role="Club_Lutteur">
-              <PropertyRef Name="LutteurID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Combat_Categorie">
           <End Role="Categorie" Type="Self.Categorie" Multiplicity="1" />
           <End Role="Combat" Type="Self.Combat" Multiplicity="*" />
@@ -301,7 +268,50 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Lutteur_Club">
+          <End Role="Club" Type="Self.Club" Multiplicity="0..1" />
+          <End Role="Lutteur" Type="Self.Lutteur" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Club">
+              <PropertyRef Name="ClubID" />
+            </Principal>
+            <Dependent Role="Lutteur">
+              <PropertyRef Name="LutteurClubID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Function Name="Affichage_Complet_Lutteur" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
+        <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="CNGLUTTEDBModelStoreContainer">
           <EntitySet Name="Affiche" EntityType="Self.Affiche" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Arbitre" EntityType="Self.Arbitre" Schema="dbo" store:Type="Tables" />
@@ -309,7 +319,6 @@
           <EntitySet Name="AvisAffiche" EntityType="Self.AvisAffiche" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Categorie" EntityType="Self.Categorie" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Club" EntityType="Self.Club" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Club_Lutteur" EntityType="Self.Club_Lutteur" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Combat" EntityType="Self.Combat" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Image" EntityType="Self.Image" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Licence" EntityType="Self.Licence" Schema="dbo" store:Type="Tables" />
@@ -341,14 +350,6 @@
             <End Role="Affiche" EntitySet="Affiche" />
             <End Role="AvisAffiche" EntitySet="AvisAffiche" />
           </AssociationSet>
-          <AssociationSet Name="FK_Club_Lutteur_Club" Association="Self.FK_Club_Lutteur_Club">
-            <End Role="Club" EntitySet="Club" />
-            <End Role="Club_Lutteur" EntitySet="Club_Lutteur" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Club_Lutteur_Lutteur" Association="Self.FK_Club_Lutteur_Lutteur">
-            <End Role="Lutteur" EntitySet="Lutteur" />
-            <End Role="Club_Lutteur" EntitySet="Club_Lutteur" />
-          </AssociationSet>
           <AssociationSet Name="FK_Combat_Categorie" Association="Self.FK_Combat_Categorie">
             <End Role="Categorie" EntitySet="Categorie" />
             <End Role="Combat" EntitySet="Combat" />
@@ -369,18 +370,22 @@
             <End Role="TypeLutte" EntitySet="TypeLutte" />
             <End Role="Licence" EntitySet="Licence" />
           </AssociationSet>
+          <AssociationSet Name="FK_Lutteur_Club" Association="Self.FK_Lutteur_Club">
+            <End Role="Club" EntitySet="Club" />
+            <End Role="Lutteur" EntitySet="Lutteur" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="CNGLUTTEDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="CNGLUTTEDBEntities" annotation:LazyLoadingEnabled="true">
+          <FunctionImport Name="Affichage_Complet_Lutteur" ReturnType="Collection(CNGLUTTEDBModel.Affichage_Complet_Lutteur_Result)" />
           <EntitySet Name="Affiches" EntityType="CNGLUTTEDBModel.Affiche" />
           <EntitySet Name="Arbitres" EntityType="CNGLUTTEDBModel.Arbitre" />
           <EntitySet Name="AvisAffiches" EntityType="CNGLUTTEDBModel.AvisAffiche" />
           <EntitySet Name="Categories" EntityType="CNGLUTTEDBModel.Categorie" />
           <EntitySet Name="Clubs" EntityType="CNGLUTTEDBModel.Club" />
-          <EntitySet Name="Club_Lutteur" EntityType="CNGLUTTEDBModel.Club_Lutteur" />
           <EntitySet Name="Combats" EntityType="CNGLUTTEDBModel.Combat" />
           <EntitySet Name="Images" EntityType="CNGLUTTEDBModel.Image" />
           <EntitySet Name="Licences" EntityType="CNGLUTTEDBModel.Licence" />
@@ -408,13 +413,9 @@
             <End Role="Categorie" EntitySet="Categories" />
             <End Role="Combat" EntitySet="Combats" />
           </AssociationSet>
-          <AssociationSet Name="FK_Club_Lutteur_Club" Association="CNGLUTTEDBModel.FK_Club_Lutteur_Club">
+          <AssociationSet Name="FK_Lutteur_Club" Association="CNGLUTTEDBModel.FK_Lutteur_Club">
             <End Role="Club" EntitySet="Clubs" />
-            <End Role="Club_Lutteur" EntitySet="Club_Lutteur" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Club_Lutteur_Lutteur" Association="CNGLUTTEDBModel.FK_Club_Lutteur_Lutteur">
             <End Role="Lutteur" EntitySet="Lutteurs" />
-            <End Role="Club_Lutteur" EntitySet="Club_Lutteur" />
           </AssociationSet>
           <AssociationSet Name="FK_Combat_Stade" Association="CNGLUTTEDBModel.FK_Combat_Stade">
             <End Role="Stade" EntitySet="Stades" />
@@ -436,8 +437,48 @@
             <End Role="Arbitre" EntitySet="Arbitres" />
             <End Role="Combat" EntitySet="Combats" />
           </AssociationSet>
-          <FunctionImport Name="Affichage_Complet_Lutteur" ReturnType="Collection(CNGLUTTEDBModel.Affichage_Complet_Lutteur_Result)" />
+          <FunctionImport Name="sp_alterdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_creatediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_dropdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(CNGLUTTEDBModel.sp_helpdiagramdefinition_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(CNGLUTTEDBModel.sp_helpdiagrams_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_renamediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="new_diagramname" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_upgraddiagrams" />
         </EntityContainer>
+        <ComplexType Name="Affichage_Complet_Lutteur_Result">
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Nom" Nullable="false" />
+          <Property Type="String" Name="email" Nullable="true" />
+          <Property Type="Int32" Name="Poids" Nullable="false" />
+          <Property Type="DateTime" Name="Date_de_naissance" Nullable="false" />
+          <Property Type="String" Name="Addresse" Nullable="true" />
+          <Property Type="String" Name="Telephonne" Nullable="true" />
+          <Property Type="String" Name="Ecurie" Nullable="false" />
+          <Property Type="String" Name="Discipline" Nullable="true" />
+        </ComplexType>
         <EntityType Name="Affiche">
           <Key>
             <PropertyRef Name="AfficheID" />
@@ -497,19 +538,7 @@
           <Property Name="ClubAdresse" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ClubEmail" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="imageUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Club_Lutteur" Relationship="CNGLUTTEDBModel.FK_Club_Lutteur_Club" FromRole="Club" ToRole="Club_Lutteur" />
-        </EntityType>
-        <EntityType Name="Club_Lutteur">
-          <Key>
-            <PropertyRef Name="Club_LutteurID" />
-          </Key>
-          <Property Name="Club_LutteurID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="LutteurID" Type="Int32" Nullable="false" />
-          <Property Name="ClubID" Type="Int32" Nullable="false" />
-          <Property Name="Date_Entree" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="Date_Sortie" Type="DateTime" Precision="0" />
-          <NavigationProperty Name="Club" Relationship="CNGLUTTEDBModel.FK_Club_Lutteur_Club" FromRole="Club_Lutteur" ToRole="Club" />
-          <NavigationProperty Name="Lutteur" Relationship="CNGLUTTEDBModel.FK_Club_Lutteur_Lutteur" FromRole="Club_Lutteur" ToRole="Lutteur" />
+          <NavigationProperty Name="Lutteurs" Relationship="CNGLUTTEDBModel.FK_Lutteur_Club" FromRole="Club" ToRole="Lutteur" />
         </EntityType>
         <EntityType Name="Combat">
           <Key>
@@ -551,6 +580,7 @@
             <PropertyRef Name="LutteurID" />
           </Key>
           <Property Name="LutteurID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LutteurClubID" Type="Int32" />
           <Property Name="LutteurName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="LutteurEmail" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="LutteurPoids" Type="Int32" Nullable="false" />
@@ -561,7 +591,7 @@
           <Property Name="imageUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Affiches" Relationship="CNGLUTTEDBModel.FK_Affiche_LutteurA" FromRole="Lutteur" ToRole="Affiche" />
           <NavigationProperty Name="Affiches1" Relationship="CNGLUTTEDBModel.FK_Affiche_LutteurB" FromRole="Lutteur" ToRole="Affiche" />
-          <NavigationProperty Name="Club_Lutteur" Relationship="CNGLUTTEDBModel.FK_Club_Lutteur_Lutteur" FromRole="Lutteur" ToRole="Club_Lutteur" />
+          <NavigationProperty Name="Club" Relationship="CNGLUTTEDBModel.FK_Lutteur_Club" FromRole="Lutteur" ToRole="Club" />
           <NavigationProperty Name="Licences" Relationship="CNGLUTTEDBModel.FK_Licence_Lutteur" FromRole="Lutteur" ToRole="Licence" />
         </EntityType>
         <EntityType Name="Stade">
@@ -654,27 +684,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Club_Lutteur_Club">
-          <End Type="CNGLUTTEDBModel.Club" Role="Club" Multiplicity="1" />
-          <End Type="CNGLUTTEDBModel.Club_Lutteur" Role="Club_Lutteur" Multiplicity="*" />
+        <Association Name="FK_Lutteur_Club">
+          <End Type="CNGLUTTEDBModel.Club" Role="Club" Multiplicity="0..1" />
+          <End Type="CNGLUTTEDBModel.Lutteur" Role="Lutteur" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Club">
               <PropertyRef Name="ClubID" />
             </Principal>
-            <Dependent Role="Club_Lutteur">
-              <PropertyRef Name="ClubID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Club_Lutteur_Lutteur">
-          <End Type="CNGLUTTEDBModel.Lutteur" Role="Lutteur" Multiplicity="1" />
-          <End Type="CNGLUTTEDBModel.Club_Lutteur" Role="Club_Lutteur" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Lutteur">
-              <PropertyRef Name="LutteurID" />
-            </Principal>
-            <Dependent Role="Club_Lutteur">
-              <PropertyRef Name="LutteurID" />
+            <Dependent Role="Lutteur">
+              <PropertyRef Name="LutteurClubID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -730,16 +748,16 @@
           <End Type="CNGLUTTEDBModel.Arbitre" Role="Arbitre" Multiplicity="*" />
           <End Type="CNGLUTTEDBModel.Combat" Role="Combat" Multiplicity="*" />
         </Association>
-        <ComplexType Name="Affichage_Complet_Lutteur_Result">
+        <ComplexType Name="sp_helpdiagramdefinition_Result">
+          <Property Type="Int32" Name="version" Nullable="true" />
+          <Property Type="Binary" Name="definition" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_helpdiagrams_Result">
+          <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
           <Property Type="Int32" Name="ID" Nullable="false" />
-          <Property Type="String" Name="Nom" Nullable="false" />
-          <Property Type="String" Name="email" Nullable="true" />
-          <Property Type="Int32" Name="Poids" Nullable="false" />
-          <Property Type="DateTime" Name="Date_de_naissance" Nullable="false" />
-          <Property Type="String" Name="Addresse" Nullable="true" />
-          <Property Type="String" Name="Telephonne" Nullable="true" />
-          <Property Type="String" Name="Ecurie" Nullable="false" />
-          <Property Type="String" Name="Discipline" Nullable="true" />
+          <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+          <Property Type="Int32" Name="OwnerID" Nullable="false" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -747,6 +765,21 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="CNGLUTTEDBModelStoreContainer" CdmEntityContainer="CNGLUTTEDBEntities">
+          <FunctionImportMapping FunctionImportName="Affichage_Complet_Lutteur" FunctionName="CNGLUTTEDBModel.Store.Affichage_Complet_Lutteur">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CNGLUTTEDBModel.Affichage_Complet_Lutteur_Result">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Nom" ColumnName="Nom" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="Poids" ColumnName="Poids" />
+                <ScalarProperty Name="Date_de_naissance" ColumnName="Date de naissance" />
+                <ScalarProperty Name="Addresse" ColumnName="Addresse" />
+                <ScalarProperty Name="Telephonne" ColumnName="Telephonne" />
+                <ScalarProperty Name="Ecurie" ColumnName="Ecurie" />
+                <ScalarProperty Name="Discipline" ColumnName="Discipline" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <EntitySetMapping Name="Affiches">
             <EntityTypeMapping TypeName="CNGLUTTEDBModel.Affiche">
               <MappingFragment StoreEntitySet="Affiche">
@@ -805,17 +838,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Club_Lutteur">
-            <EntityTypeMapping TypeName="CNGLUTTEDBModel.Club_Lutteur">
-              <MappingFragment StoreEntitySet="Club_Lutteur">
-                <ScalarProperty Name="Date_Sortie" ColumnName="Date_Sortie" />
-                <ScalarProperty Name="Date_Entree" ColumnName="Date_Entree" />
-                <ScalarProperty Name="ClubID" ColumnName="ClubID" />
-                <ScalarProperty Name="LutteurID" ColumnName="LutteurID" />
-                <ScalarProperty Name="Club_LutteurID" ColumnName="Club_LutteurID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Combats">
             <EntityTypeMapping TypeName="CNGLUTTEDBModel.Combat">
               <MappingFragment StoreEntitySet="Combat">
@@ -858,6 +880,7 @@
                 <ScalarProperty Name="LutteurPoids" ColumnName="LutteurPoids" />
                 <ScalarProperty Name="LutteurEmail" ColumnName="LutteurEmail" />
                 <ScalarProperty Name="LutteurName" ColumnName="LutteurName" />
+                <ScalarProperty Name="LutteurClubID" ColumnName="LutteurClubID" />
                 <ScalarProperty Name="LutteurID" ColumnName="LutteurID" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -900,21 +923,30 @@
               <ScalarProperty Name="ArbitreID" ColumnName="ArbitreID" />
             </EndProperty>
           </AssociationSetMapping>
-          <FunctionImportMapping FunctionImportName="Affichage_Complet_Lutteur" FunctionName="CNGLUTTEDBModel.Store.Affichage_Complet_Lutteur">
+          <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="CNGLUTTEDBModel.Store.sp_alterdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="CNGLUTTEDBModel.Store.sp_creatediagram" />
+          <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="CNGLUTTEDBModel.Store.sp_dropdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="CNGLUTTEDBModel.Store.sp_helpdiagramdefinition">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="CNGLUTTEDBModel.Affichage_Complet_Lutteur_Result">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Nom" ColumnName="Nom" />
-                <ScalarProperty Name="email" ColumnName="email" />
-                <ScalarProperty Name="Poids" ColumnName="Poids" />
-                <ScalarProperty Name="Date_de_naissance" ColumnName="Date de naissance" />
-                <ScalarProperty Name="Addresse" ColumnName="Addresse" />
-                <ScalarProperty Name="Telephonne" ColumnName="Telephonne" />
-                <ScalarProperty Name="Ecurie" ColumnName="Ecurie" />
-                <ScalarProperty Name="Discipline" ColumnName="Discipline" />
+              <ComplexTypeMapping TypeName="CNGLUTTEDBModel.sp_helpdiagramdefinition_Result">
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_helpdiagrams" FunctionName="CNGLUTTEDBModel.Store.sp_helpdiagrams">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CNGLUTTEDBModel.sp_helpdiagrams_Result">
+                <ScalarProperty Name="Database" ColumnName="Database" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Owner" ColumnName="Owner" />
+                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="CNGLUTTEDBModel.Store.sp_renamediagram" />
+          <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="CNGLUTTEDBModel.Store.sp_upgraddiagrams" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
