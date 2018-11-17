@@ -21,16 +21,17 @@ namespace Lamb_Ji_ViewModel
         public string LutteurTelephone { get; set; }
         public string imageUrl { get; set; }
 
-        public Nullable<int> LutteurClubID { get; set; }
+        public int? LutteurClubID { get; set; }
         public string ClubName { get; set; }
-
-
 
         public HttpPostedFileBase ImageUpload { get; set; }
 
+        //public virtual Club Club { get; set; }
 
-     
-       
+
+
+
+
 
 
     }

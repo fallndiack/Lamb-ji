@@ -22,7 +22,6 @@ C:\Users\NDIACK\Lamb-ji\Lamb_Ji_Gestion\Lamb_Ji_DAL\bin\Debug\EntityFramework.xm
 C:\Users\NDIACK\Lamb-ji\Lamb_Ji_Gestion\Lamb_Ji_DAL\bin\Debug\EntityFramework.SqlServer.xml
 C:\Users\NDIACK\Lamb-ji\Lamb_Ji_Gestion\Lamb_Ji_DAL\bin\Debug\fr\EntityFramework.resources.dll
 C:\Users\NDIACK\Lamb-ji\Lamb_Ji_Gestion\Lamb_Ji_DAL\bin\Debug\fr\EntityFramework.SqlServer.resources.dll
-C:\Users\NDIACK\Lamb-ji\Lamb_Ji_Gestion\Lamb_Ji_DAL\obj\Debug\Lamb_Ji_DAL.csprojResolveAssemblyReference.cache
 C:\Users\NDIACK\Lamb-ji\Lamb_Ji_Gestion\Lamb_Ji_DAL\obj\Debug\Lamb_Ji_DAL.csproj.CoreCompileInputs.cache
 C:\Users\NDIACK\Lamb-ji\Lamb_Ji_Gestion\Lamb_Ji_DAL\obj\Debug\Lamb_Ji_DAL.dll
 C:\Users\NDIACK\Lamb-ji\Lamb_Ji_Gestion\Lamb_Ji_DAL\obj\Debug\Lamb_Ji_DAL.pdb

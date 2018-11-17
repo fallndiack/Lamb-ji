@@ -27,11 +27,10 @@ namespace Lamb_Ji_DAL
         public string ClubAdresse { get; set; }
         public string ClubEmail { get; set; }
         public string imageUrl { get; set; }
-
-        public HttpPostedFileBase ImageUpload { get; set; }
-
-
+    
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Lutteur> Lutteurs { get; set; }
+        public HttpPostedFileBase ImageUpload { get; set; }
+
     }
 }

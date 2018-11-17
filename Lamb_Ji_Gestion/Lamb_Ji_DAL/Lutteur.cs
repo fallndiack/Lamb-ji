@@ -33,7 +33,6 @@ namespace Lamb_Ji_DAL
         public string LutteurDescription { get; set; }
         public string LutteurTelephone { get; set; }
         public string imageUrl { get; set; }
-
         public HttpPostedFileBase ImageUpload { get; set; }
 
 

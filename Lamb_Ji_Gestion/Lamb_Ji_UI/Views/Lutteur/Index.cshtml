@@ -35,6 +35,89 @@
         </tbody>
 
     </table>
+
+    @*Create a popup modal with Registration form Add or Edit Lutteur*@
+
+    <div class="modal fade" id="MyModal">
+         <div class="modal-dialog">
+             <div class="modal-content">
+                 <div class="modal-header">
+                     <a href="#" class="close" data-dismiss="modal">&times;</a>
+                     <h4 id="ModalTitle"></h4>
+                 </div>
+                 <div class="modal-body">
+                     <form id="form">
+                         <fieldset id="SubmitForm">
+                             @Html.HiddenFor(m => m.LutteurID, new { @id = "LutID" })
+                             <div class="form-group">
+                                 @Html.TextBoxFor(m => m.LutteurName, new { @id = "LutNam", @class = "form-control", @placeholder = "Nom" })
+                             </div>
+
+                             <div class="form-group">
+                                 @Html.TextBoxFor(m => m.LutteurEmail, new { @id = "LutEmail", @class = "form-control", @placeholder = "Email" })
+                             </div>
+
+                             <div class="form-group">
+                                 @Html.TextBoxFor(m => m.LutteurPoids, new { @id = "LutPoids", @class = "form-control", @placeholder = "Poids" })
+                             </div>
+
+                             <div class="form-group">
+                                 @Html.TextBoxFor(m => m.LutteurDateNaissance, new { @id = "LutNais", @class = "form-control", @placeholder = "Date de Naissance" })
+                             </div>
+
+                             <div class="form-group">
+                                 @Html.TextBoxFor(m => m.LutteurAddresse, new { @id = "LutAdd", @class = "form-control", @placeholder = "Addresse" })
+                             </div>
+
+                             <div class="form-group">
+                                 @Html.TextBoxFor(m => m.LutteurDescription, new { @id = "LutDesc", @class = "form-control", @placeholder = "Description" })
+                             </div>
+
+                             <div class="form-group">
+                                 @Html.TextBoxFor(m => m.LutteurTelephone, new { @id = "LutTel", @class = "form-control", @placeholder = "Telephone" })
+                             </div>
+
+                             <div class="form-group">
+                                 @Html.TextBoxFor(m => m.imageUrl, new { @id = "LutImg", @class = "form-control", @placeholder = "Image" })
+                             </div>
+
+                             <div class="form-group">
+                                 @Html.DropDownListFor(m => m.ClubName, (IEnumerable<SelectListItem>)ViewBag.ListOfLutteur, "--Select Club--", new { @id = "DropDwn", @class = "form-control" })
+                             </div>
+
+                             <div class="form-group">
+                                 <a href="#" class="btn btn-block btn-success" id="SaveLutteurRecord">Sauver</a>
+                             </div>
+
+
+                         </fieldset>
+                     </form>
+                 </div>
+             </div>
+         </div>
+    </div>
+
+    @*Create a popup for deleteConfirmation*@
+
+    <div class="modal fade" id="DeleteConfirmation">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+                    <h4>Supprimer un Lutteur</h4>
+                </div>
+                <div class="modal-body">
+                    <h3>Êtes-vous sûr de vouloir supprimer ce Lutteur?</h3>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-primary" data-dismiss="modal">Annuler</a>
+                    <a href="#" class="btn btn-danger" onclick="ConfirmDelete()">Confirmer</a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 <script>
     $("#LoadingStatus").html("Loading.....");
@@ -53,13 +136,80 @@
                 "<td>" + ListLutteur[i].LutteurDescription + "<td/>" +
                 "<td>" + ListLutteur[i].ClubName + "<td/>" +
                 "<td>" + ListLutteur[i].imageUrl + "<td/>" +
-                "<td>" + "<a href='#' class='btn btn-warning' onclick='EditLutteurRecord() '><span class='glyphicon glyphicon-edit'></span></a>" + "</td>" +
-                "<td>" + "<a href='#' class='btn btn-danger' onclick='DeleteLutteurRecord() '><span class='glyphicon glyphicon-trash'></span></a>" + "</td>" +
+                "<td>" + "<a href='#' class='btn btn-warning' onclick='EditLutteurRecord(" + ListLutteur[i].LutteurID+") '><span class='glyphicon glyphicon-edit'></span></a>" + "</td>" +
+                "<td>" + "<a href='#' class='btn btn-danger' onclick='DeleteLutteurRecord(" + ListLutteur[i].LutteurID +") '><span class='glyphicon glyphicon-trash'></span></a>" + "</td>" +
                 "</tr>";
             SetData.append(Data);
             $("#LoadingStatus").html(" ");
 
         }
+    }
+
+    //show The Popup modal for Add new Lutteur
+    function AddNewLutteur(LutteurID) {
+        $("#form")[0].reset();
+        $("#LutID").val(0);
+        $("#DropDwn").text("--Select Club--");
+        $("#ModalTitle").html("Ajouter un Nouveau Lutteur");
+        $("#MyModal").modal();
+    }
+
+    //Show the popup modal for edit lutteur
+    function EditLutteurRecord(LutteurID) {
+        var url = "/Lutteur/GetLutteurById?LutteurID=" + LutteurID;
+        $("#ModalTitle").html("Modifier un Lutteur");
+        $("#MyModal").modal();
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function (data) {
+                var obj = JSON.parse(data);
+                $("#LutID").val(obj.LutteurID);
+                $("#LutNam").val(obj.LutteurName);
+                $("#LutEmail").val(obj.LutteurEmail);
+                $("#LutPoids").val(obj.LutteurPoids);
+                $("#LutNais").val(obj.LutteurDateNaissance);
+                $("#LutAdd").val(obj.LutteurAddresse);
+                $("#LutDesc").val(obj.LutteurDescription);
+                $("#LutTel").val(obj.LutteurTelephone);
+                $("#LutImg").val(obj.imageUrl);
+                $("#DropDwn").text(obj.ClubName);
+                //$("#DropDwn").val(obj.LutteurClubID);
+            }
+        })
+    }
+
+    $("#SaveLutteurRecord").click(function () {
+        var data = $("#SubmitForm").serialize();
+        $.ajax({
+            type: "Post",
+            url: "/Lutteur/SaveDataInDatabase",
+            data: data,
+            success: function (result) {
+                toastr.info("Successfully!.....");
+                window.location.href = "/Lutteur/Index";
+                $("#MyModal").modal("hide");
+            }
+        })
+    })
+
+    //Show popup modal for DeleteConfirmation
+    function DeleteLutteurRecord(LutteurID) {
+        $("#LutID").val(LutteurID);
+        $("#DeleteConfirmation").modal("show");
+    }
+    function ConfirmDelete() {
+        var LutId = $("#LutID").val();
+        $.ajax({
+            type: "POST",
+            url: "/Lutteur/DeleteLutteurRecord?LutteurID=" + LutId,
+            success: function (result) {
+                toastr.info(" Lutteur Supprimé Avec Succés!.....");
+                $("#DeleteConfirmation").modal("hide");
+                $(".row" + LutId).remove();
+
+            }
+        })
     }
 
 </script>
