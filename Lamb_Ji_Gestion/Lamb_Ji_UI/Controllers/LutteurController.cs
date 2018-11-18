@@ -3,6 +3,7 @@ using Lamb_Ji_ViewModel;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -24,9 +25,9 @@ namespace Lamb_Ji_UI.Controllers
         public JsonResult GetLutteurList()
         {
 
-            List<LutteurViewModel> LutList = db.Lutteurs.Select(x => new LutteurViewModel
+            List<LutteurViewModel> LutList = db.Lutteurs.Include(c => c.Club).Select(x => new LutteurViewModel
             {
-
+                 
                 LutteurID = x.LutteurID,
                 LutteurName = x.LutteurName,
                 LutteurAddresse = x.LutteurAddresse,
@@ -45,7 +46,7 @@ namespace Lamb_Ji_UI.Controllers
 
         public JsonResult GetLutteurById(int LutteurID)
         {
-            Lutteur model = db.Lutteurs.Where(x => x.LutteurID == LutteurID).FirstOrDefault();
+            Lutteur model = db.Lutteurs.Where(x => x.LutteurID == LutteurID).Include(c => c.Club).FirstOrDefault();
             string value = string.Empty;
             value = JsonConvert.SerializeObject(model, Formatting.Indented, new JsonSerializerSettings
             {
@@ -61,7 +62,7 @@ namespace Lamb_Ji_UI.Controllers
             {
                 if (model.LutteurID > 0)
                 {
-                    Lutteur Lut = db.Lutteurs.SingleOrDefault(x => x.LutteurID == model.LutteurID);
+                    Lutteur Lut = db.Lutteurs.Include(c => c.Club).SingleOrDefault(x => x.LutteurID == model.LutteurID);
                     Lut.LutteurName = model.LutteurName;
                     Lut.LutteurEmail = model.LutteurEmail;
                     Lut.LutteurDateNaissance = model.LutteurDateNaissance;
@@ -105,16 +106,22 @@ namespace Lamb_Ji_UI.Controllers
             bool result = false;
             Licence lic = db.Licences.SingleOrDefault(a => a.LutteurID == LutteurID);
             Lutteur Lut = db.Lutteurs.SingleOrDefault(x => x.LutteurID == LutteurID);
-            if (Lut != null)
+            if (lic == null)
             {
-                if (lic != null)
+                if (Lut != null)
                 {
-                    db.Licences.Remove(lic);
                     db.Lutteurs.Remove(Lut);
                     db.SaveChanges();
                     result = true;
                 }
-               
+            }
+            else
+            {
+                db.Licences.Remove(lic);
+                db.Lutteurs.Remove(Lut);
+                db.SaveChanges();
+                result = true;
+
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
