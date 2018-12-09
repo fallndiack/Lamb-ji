@@ -188,3 +188,9 @@ C:\Users\NDIACK\Lamb-ji\Lamb_Ji_Gestion\Lamb_Ji_UI\obj\Debug\Lamb_Ji_UI.csprojRe
 C:\Users\NDIACK\Lamb-ji\Lamb_Ji_Gestion\Lamb_Ji_UI\obj\Debug\Lamb_Ji_UI.csproj.CoreCompileInputs.cache
 C:\Users\NDIACK\Lamb-ji\Lamb_Ji_Gestion\Lamb_Ji_UI\obj\Debug\Lamb_Ji_UI.dll
 C:\Users\NDIACK\Lamb-ji\Lamb_Ji_Gestion\Lamb_Ji_UI\obj\Debug\Lamb_Ji_UI.pdb
+C:\Users\NDIACK\Lamb-ji\Lamb_Ji_Gestion\Lamb_Ji_UI\bin\jQuery.Validation.Unobtrusive.Native.dll
+C:\Users\NDIACK\Lamb-ji\Lamb_Ji_Gestion\Lamb_Ji_UI\bin\AutoMapper.dll
+C:\Users\NDIACK\Lamb-ji\Lamb_Ji_Gestion\Lamb_Ji_UI\bin\System.ValueTuple.dll
+C:\Users\NDIACK\Lamb-ji\Lamb_Ji_Gestion\Lamb_Ji_UI\bin\AutoMapper.pdb
+C:\Users\NDIACK\Lamb-ji\Lamb_Ji_Gestion\Lamb_Ji_UI\bin\AutoMapper.xml
+C:\Users\NDIACK\Lamb-ji\Lamb_Ji_Gestion\Lamb_Ji_UI\bin\System.ValueTuple.xml

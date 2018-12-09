@@ -11,6 +11,9 @@ namespace Lamb_Ji_DAL
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
     using System.Web;
 
     public partial class Lutteur
@@ -21,6 +24,7 @@ namespace Lamb_Ji_DAL
             this.Affiches = new HashSet<Affiche>();
             this.Affiches1 = new HashSet<Affiche>();
             this.Licences = new HashSet<Licence>();
+            //imageUrl = "~/Images/Image-Lutteur/def.png";
         }
     
         public int LutteurID { get; set; }
@@ -30,10 +34,14 @@ namespace Lamb_Ji_DAL
         public int LutteurPoids { get; set; }
         public System.DateTime LutteurDateNaissance { get; set; }
         public string LutteurAddresse { get; set; }
+
         public string LutteurDescription { get; set; }
         public string LutteurTelephone { get; set; }
         public string imageUrl { get; set; }
+        [NotMapped]
         public HttpPostedFileBase ImageUpload { get; set; }
+
+        
 
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -43,5 +51,7 @@ namespace Lamb_Ji_DAL
         public virtual Club Club { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Licence> Licences { get; set; }
+
+      
     }
 }

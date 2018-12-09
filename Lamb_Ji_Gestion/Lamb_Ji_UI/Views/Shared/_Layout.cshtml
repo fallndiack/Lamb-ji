@@ -6,11 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - LAMB_JI GESTION</title>
     @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/DataTables")
+
     @RenderSection("scripts", required: false)
 
     <script type="text/javascript">
@@ -20,14 +21,16 @@
                 "positionClass": "toast-bottom-right",
                 "onclick": null,
                 "fadeIn": 300,
-                "fadeOut": 2000,
+                "fadeOut": 1000,
                 "timeOut": 3000,
                 "extendedTimeOut": 1000,
                 "progressBar": true
             }
         });
+
     </script>
 
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
 
 </head>
 <body>
@@ -57,7 +60,7 @@
                             <li>@Html.ActionLink("Clubs", "Index", "Club")</li>
                             <li>@Html.ActionLink("Slider", "AddImage", "Slider")</li>
                             <li>@Html.ActionLink("Stades", "Index", "Stade")</li>
-                            <li>@Html.ActionLink("Lutteurs", "Index", "Lutteur")</li>
+                            <li>@Html.ActionLink("Gerer_Lutteurs", "Index", "Lutteur")</li>
                             <li>@Html.ActionLink("Arbitres", "Index", "Arbitre")</li>
                             <li>@Html.ActionLink("Affiche", "Index", "Affiche")</li>
 
@@ -73,13 +76,11 @@
                 @RenderBody()
                 <hr />
                 <footer>
-                    <p>&copy; @DateTime.Now.Year - Lamb_Ji Gestion</p>
+                    <p>PSR09133 Ndiack Fall - Lamb_Ji Gestion</p>
                 </footer>
             </div>
         </div>
     </div>
-    @*@Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)*@
+   
 </body>
 </html>

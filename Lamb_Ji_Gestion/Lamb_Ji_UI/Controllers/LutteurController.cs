@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -22,27 +23,49 @@ namespace Lamb_Ji_UI.Controllers
             return View();
         }
 
+        public ActionResult ViewAll()
+        {
+            List<Club> LutList = db.Clubs.ToList();
+            ViewBag.ListOfLutteur = new SelectList(LutList, "ClubID", "ClubName");
+
+            List<Lutteur> LutteursDb = db.Lutteurs.ToList();
+            List<LutteurViewModel> LutteursVM = new List<LutteurViewModel>();
+            foreach (var item in LutteursDb)
+            {
+                LutteurViewModel Lvm = AutoMapper.Mapper.Map<LutteurViewModel>(item);
+
+                Lvm.Club = db.Clubs.Where(a => a.ClubID == item.LutteurClubID).FirstOrDefault();
+
+                LutteursVM.Add(Lvm);
+            }
+
+            return View(LutteursVM);
+        }
         public JsonResult GetLutteurList()
         {
-
-            List<LutteurViewModel> LutList = db.Lutteurs.Include(c => c.Club).Select(x => new LutteurViewModel
+            List<Lutteur> LutteursDb = db.Lutteurs.ToList();
+            List<LutteurViewModel> LutteursVM = new List<LutteurViewModel>();
+            foreach (var item in LutteursDb)
             {
-                 
-                LutteurID = x.LutteurID,
-                LutteurName = x.LutteurName,
-                LutteurAddresse = x.LutteurAddresse,
-                LutteurEmail = x.LutteurEmail,
-                LutteurDateNaissance = x.LutteurDateNaissance,
-                LutteurDescription = x.LutteurDescription,
-                LutteurPoids = x.LutteurPoids,
-                LutteurTelephone = x.LutteurTelephone,
-                ClubName = x.Club.ClubName,
-                imageUrl = x.imageUrl
-            }).ToList();
+                LutteurViewModel Lvm = new LutteurViewModel();
+                Lvm.LutteurID = item.LutteurID;
+                Lvm.LutteurClubID = item.LutteurClubID;
+                Lvm.LutteurName = item.LutteurName;
+                Lvm.LutteurEmail = item.LutteurEmail;
+                Lvm.LutteurDescription = item.LutteurDescription;
+                Lvm.LutteurAddresse = item.LutteurAddresse;
+                Lvm.LutteurDateNaissance = item.LutteurDateNaissance;
+                Lvm.LutteurPoids = item.LutteurPoids;
+                Lvm.LutteurTelephone = item.LutteurTelephone;
+                Lvm.ClubName = item.Club.ClubName;
 
-            return Json(LutList, JsonRequestBehavior.AllowGet);
+                LutteursVM.Add(Lvm);
+            }
 
+            return Json(LutteursVM, JsonRequestBehavior.AllowGet);
         }
+
+
 
         public JsonResult GetLutteurById(int LutteurID)
         {
@@ -55,12 +78,15 @@ namespace Lamb_Ji_UI.Controllers
             return Json(value, JsonRequestBehavior.AllowGet);
         }
 
+        //[ValidateAntiForgeryToken]
         public JsonResult SaveDataInDatabase(LutteurViewModel model)
         {
             var result = false;
-            try
+            if (ModelState.IsValid) { 
+                try
             {
-                if (model.LutteurID > 0)
+          
+                    if (model.LutteurID > 0)
                 {
                     Lutteur Lut = db.Lutteurs.Include(c => c.Club).SingleOrDefault(x => x.LutteurID == model.LutteurID);
                     Lut.LutteurName = model.LutteurName;
@@ -77,7 +103,16 @@ namespace Lamb_Ji_UI.Controllers
                 }
                 else
                 {
-                    Lutteur Lut = new Lutteur();
+                        //if (model.imageUrl != null)
+                        //{
+                        //    string fileName = Path.GetFileNameWithoutExtension(model.ImageUpload.FileName);
+                        //    string extension = Path.GetExtension(model.ImageUpload.FileName);
+                        //    fileName = fileName + DateTime.Now.ToString("yymmssff") + extension;
+                        //    model.imageUrl = fileName;
+                        //    model.ImageUpload.SaveAs(Path.Combine(Server.MapPath("~/Images/Image-Lutteur"), fileName));
+                        //}
+
+                        Lutteur Lut = new Lutteur();
                     Lut.LutteurName = model.LutteurName;
                     Lut.LutteurEmail = model.LutteurEmail;
                     Lut.LutteurDateNaissance = model.LutteurDateNaissance;
@@ -96,6 +131,7 @@ namespace Lamb_Ji_UI.Controllers
             {
 
                 throw ex;
+            }
             }
             return Json(result, JsonRequestBehavior.AllowGet);
 
@@ -125,5 +161,8 @@ namespace Lamb_Ji_UI.Controllers
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+
+
+      
     }
 }
