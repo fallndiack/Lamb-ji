@@ -28,9 +28,6 @@
 
 @*Creation du modal pour ajout et edit d'un lutteur*@
 
-@using (Html.BeginForm("SaveDataInDatabase", "Lutteur", FormMethod.Post, new { id = "form", enctype = "multipart/form-data" }))
-{
-
 
     <div id="myModal" class="modal fade in">
 
@@ -43,7 +40,7 @@
 
                 <div class="modal-body" style=" text-align:center">
 
-                    <fieldset id="SubmitForm">
+                    <form id="SubmitForm" method="post" enctype="multipart/form-data" onsubmit="return AjaxPost(this)">
                         @Html.HiddenFor(model => model.LutteurID, new { @id = "LutID" })
                         @Html.HiddenFor(model => model.LutteurClubID, new { @id = "LutClubID" })
 
@@ -67,7 +64,6 @@
                                 @Html.ValidationMessageFor(model => model.LutteurEmail, "", new { @class = "text-danger" })
                             </div>
 
-
                             <div class="form-group">
                                 @Html.LabelFor(model => model.LutteurAddresse, htmlAttributes: new { @class = "control-label col-md-4" })
                                 <div class="col-md-8">
@@ -75,7 +71,6 @@
                                     @Html.ValidationMessageFor(model => model.LutteurAddresse, "", new { @class = "text-danger", @style = "margin-left: -145px" })
                                 </div>
                             </div>
-
 
                             <div class="form-group">
                                 @Html.LabelFor(model => model.LutteurPoids, htmlAttributes: new { @class = "control-label col-md-4" })
@@ -85,7 +80,6 @@
                                 </div>
                             </div>
 
-
                             <div class="form-group">
                                 @Html.LabelFor(model => model.LutteurDateNaissance, htmlAttributes: new { @class = "control-label col-md-4" })
                                 <div class="col-md-8">
@@ -93,7 +87,6 @@
                                     @Html.ValidationMessageFor(model => model.LutteurDateNaissance, "", new { @class = "text-danger", @style = "margin-left: -145px" })
                                 </div>
                             </div>
-
 
                             <div class="form-group">
                                 @Html.LabelFor(model => model.LutteurTelephone, htmlAttributes: new { @class = "control-label col-md-4" })
@@ -103,7 +96,6 @@
                                 </div>
                             </div>
 
-
                             <div class="form-group">
                                 @Html.LabelFor(model => model.LutteurDescription, htmlAttributes: new { @class = "control-label col-md-4" })
                                 <div class="col-md-8">
@@ -112,14 +104,12 @@
                                 </div>
                             </div>
 
-
                             <div class="form-group">
                                 @Html.LabelFor(model => model.LutteurClubID, htmlAttributes: new { @class = "control-label col-md-4" })
                                 <div class="col-md-8">
                                     @Html.DropDownListFor(model => model.LutteurClubID, ViewBag.ListOfLutteur as SelectList, "--Select Club--", new { @class = "form-control", @id = "Club" })
                                 </div>
                             </div>
-
 
                             <div class="form-group">
                                 @Html.LabelFor(model => model.imageUrl, htmlAttributes: new { @class = "control-label col-md-4" })
@@ -129,23 +119,24 @@
                                 </div>
                             </div>
 
-
                         </div>
-                    </fieldset>
+                        </form>
 
-                    <div style="text-align:center" id="chargement">
-                        <img src="~/Images/tenor.gif" />
-                    </div>
+                        @*<div style="text-align:center" id="chargement">
+                    <img src="~/Images/tenor.gif" />
+                </div>*@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Retour</button>
-                    <button type="button" class="btn btn-primary" data-style="expand-left" id="SaveRecord" onclick="Save()">Enregistrer</button>
+                    <button type="button" class="btn btn-primary" data-style="expand-left" id="SaveRecord" onclick="Add()">Enregistrer</button>
+
                 </div>
+                
             </div>
         </div>
     </div>
 
-}
+
 
     
 
@@ -192,52 +183,90 @@
         });
 
 
- $("#SaveRecord").click(function () {
-            var formData = new FormData();
 
-            formData.append($('#ImageUpload').files); //append the image file
+        function Add() {
+                $.validator.unobtrusive.parse($('#SubmitForm'));
+                if ($('#SubmitForm').valid()) {
+           
+                    var LutObj = {
+                                 LutteurID: $('#LutID').val(),
+                                 LutteurName: $('#LutName').val(),
+                                 LutteurEmail: $('#LutEmail').val(),
+                                 LutteurAddresse: $('#LutAddresse').val(),
+                                 LutteurPoids: $('#LutPoids').val(),
+                                 LutteurDateNaissance: $('#LutDateNaissance').val(),
+                                 LutteurTelephone: $('#LutTelephone').val(),
+                                 LutteurDescription: $('#LutDesc').val(),
+                                 LutteurClubID: $('#Club').val(),
+                                 imageUrl: $('#ImageUpload').val()
+                             };
+                    $.ajax({
+                    url: "/Lutteur/SaveDataInDatabase",
+                    data: JSON.stringify(LutObj),
+                    type: "POST",
+                    contentType: "application/json;charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        toastr.info("Lutteru ajouté avec succés!!!....");
+                        $('#myModal').modal('hide');
+                             }
+               
+                    });
 
-            var other_data = $('form').serializeArray();
-            $.each(other_data, function (key, input) { //append other input value
-                formData.append(input.name, input.value);
-            });
-
-            $.ajax({
-                type: "POST",
-                url: "/Lutteur/SaveDataInDatabase",
-                data: formData,
-                contentType: false, // Not to set any content header
-                processData: false, // Not to process data
-                success: function (result) {
-                alert("Success");
-                    window.location.href = "/Lutteur/index";
-                    //$("#MyModal").modal("hide"); //this line is unnecessary because the user has been redirect
                 }
-            })
-        });
+        }  
 
 
 
 
 
-             //Rechargement de  la datatable
-
-             //function ReloadLutteurtable() {
-             //    var table = $('#LutteurTable').DataTable();
-             //    table.destroy();
-
-             //}
 
 
 
-             //// Créer une nouvelle forme modal : création d'un utilisateur
+        //function Save() {
+        //    $.validator.unobtrusive.parse($('#SubmitForm'));
+        //    if ($('#SubmitForm').valid()) {
+        //        var obj = {
+        //            LutteurID: $('#LutID').val(),
+        //            LutteurName: $('#LutName').val(),
+        //            LutteurEmail: $('#LutEmail').val(),
+        //            LutteurAddresse: $('#LutAddresse').val(),
+        //            LutteurPoids: $('#LutPoids').val(),
+        //            LutteurDateNaissance: $('#LutDateNaissance').val(),
+        //            LutteurTelephone: $('#LutTelephone').val(),
+        //            LutteurDescription: $('#LutDesc').val(),
+        //            LutteurClubID: $('#Club').val(),
+        //            imageUrl: $('#ImageUpload').val()
+        //        };
 
-             //function StartModal() {
-             //    $("#btCreate").click(function () {
-             //        ResetModal();
-             //        $("#Male").prop("checked", true);
-             //    })
-             //}
+
+        //        ajax: ({
+        //            type: 'POST',
+        //            contentType: "application/json; charset=utf-8",
+        //            dataType: "json",
+        //            url: "/Lutteur/SaveDataInDatabase/",
+        //            data: JSON.stringify(obj),
+        //            success: function (result) {
+        //                if (result) {
+        //                    toastr.info(" Lutteur Ajouté Avec Succés!.....");
+        //                }
+        //                else {
+        //                    toastr.info(" Lutteur pas ajouté!!!.....");                        }
+        //            }
+        //        })
+        //        if ($(form).attr('enctype') == "multipart/form-data") {
+        //            ajaxConfig["contentType"] = false;
+        //            ajaxConfig["processData"] = false;
+        //        }
+        //    //    $.ajax(ajaxConfig);
+
+        //    }
+        //    //return false;
+        //}
+
+
+ 
+      
 
 
 
@@ -305,8 +334,6 @@
             //        }
             //    })
             //}
-
-
 
 
 

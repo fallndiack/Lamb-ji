@@ -103,14 +103,14 @@ namespace Lamb_Ji_UI.Controllers
                 }
                 else
                 {
-                        //if (model.imageUrl != null)
-                        //{
-                        //    string fileName = Path.GetFileNameWithoutExtension(model.ImageUpload.FileName);
-                        //    string extension = Path.GetExtension(model.ImageUpload.FileName);
-                        //    fileName = fileName + DateTime.Now.ToString("yymmssff") + extension;
-                        //    model.imageUrl = fileName;
-                        //    model.ImageUpload.SaveAs(Path.Combine(Server.MapPath("~/Images/Image-Lutteur"), fileName));
-                        //}
+                        if (model.ImageUpload != null)
+                        {
+                            string fileName = Path.GetFileNameWithoutExtension(model.ImageUpload.FileName);
+                            string extension = Path.GetExtension(model.ImageUpload.FileName);
+                            fileName = fileName + DateTime.Now.ToString("yymmssff") + extension;
+                            model.imageUrl = fileName;
+                            model.ImageUpload.SaveAs(Path.Combine(Server.MapPath("~/Images/Image-Lutteur"), fileName));
+                        }
 
                         Lutteur Lut = new Lutteur();
                     Lut.LutteurName = model.LutteurName;

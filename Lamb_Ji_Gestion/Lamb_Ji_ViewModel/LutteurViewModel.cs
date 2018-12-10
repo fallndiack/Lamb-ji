@@ -19,7 +19,7 @@ namespace Lamb_Ji_ViewModel
             //imageUrl = "~/Images/Image-Lutteur/default.png";
         }
 
-        public int LutteurID { get; set; }
+        public int? LutteurID { get; set; }
         public Nullable<int> LutteurClubID { get; set; }
         [Required(ErrorMessage = "Le nom est requis!")]
         [DisplayName("Prénom Nom")]
@@ -36,8 +36,9 @@ namespace Lamb_Ji_ViewModel
         [Display(Name = "Date de Naissance")]
         //[DataType(DataType.Date, ErrorMessage = "Invalid Date Format")]
         //[DisplayFormat(DataFormatString = "dd-mm-yyyy")]
+        [DisplayFormat(DataFormatString = "{0:d}")]
         //[Range(typeof(DateTime), "1975-01-01", "2002-12-31",
-         //ErrorMessage = "La date {0} doit etre compris entre {1} et {2}")]
+        //ErrorMessage = "La date {0} doit etre compris entre {1} et {2}")]
         public System.DateTime LutteurDateNaissance { get; set; }
         [DisplayName("Adresse")]
         public string LutteurAddresse { get; set; }
